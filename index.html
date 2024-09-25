@@ -101,7 +101,8 @@
             const contenido = document.getElementById('contenido');
             const mensajeDispositivo = document.getElementById('mensaje-dispositivo');
 						const video = document.getElementById("video-fondo");
-            if (esDispositivoMovil() ||  window.innerWidth > screen.availWidth) {
+             const esTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (esDispositivoMovil() ||  window.innerWidth > screen.availWidth || esTouchScreen) {
                 contenido.style.display = 'none';  
                 video.style.display = 'none';
                 mensajeDispositivo.style.display = 'block';  
@@ -114,8 +115,8 @@
         let tiempoCuentaAtrasVerde = 3;
         let tiempoContadorVictoria = 30;
         let faseActual='Negro';
-        let videoCorrectos = ["PLaanhBuiVU", "cLGMWX-DSzY", "i3Moae_SSlA", "7QLSRMoKKS0", "lpfZAXz2OP0", "AWM5ZNdWlqw", "Z4EwojysJv8", "na3U9Uvpz7g", "X-fXQ2u9HKg", "Dg4TOfazo_M", "Y4Fes8Up1tA"];
-        let videoIncorrectos = ["X-fXQ2u9HKg"];
+        let videoCorrectos = ["PLaanhBuiVU", "cLGMWX-DSzY", "i3Moae_SSlA", "7QLSRMoKKS0", "lpfZAXz2OP0", "AWM5ZNdWlqw", "Z4EwojysJv8", "na3U9Uvpz7g", "X-fXQ2u9HKg", "Dg4TOfazo_M", "Y4Fes8Up1tA", "5g_b5a_fKLU"];
+        let videoIncorrectos = ["Y4Fes8Up1tA"];
         let videoIncorrectoss = ["eNnfMBCn8Gw"];
         let videoVictoria = ["mLirlyAUtJQ"];
         const correctoSound = document.getElementById("correcto-sound");
