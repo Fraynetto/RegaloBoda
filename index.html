@@ -61,6 +61,14 @@
             border-radius: 30px;
             display: inline-block;
         }
+         #mensaje-dispositivo {
+            font-size: 2em;
+            display: none;
+            padding: 50px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 20px;
+        }
     </style>
 </head>
 <body>
@@ -81,8 +89,25 @@
           <div id="contador" class="fondo-negro">30 segundos restantes para la victoria</div> 
   
     </div>
-
+ <div id="mensaje-dispositivo">
+        Esta página no se puede abrir desde un smartphone o tablet. Utiliza un PC.
+    </div>
     <script>
+     function esDispositivoMovil() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            return /android|iphone|ipad|ipod|windows phone|mobile/i.test(userAgent);
+        }
+         function mostrarMensajeDispositivo() {
+            const contenido = document.getElementById('contenido');
+            const mensajeDispositivo = document.getElementById('mensaje-dispositivo');
+						const video = document.getElementById("video-fondo");
+            if (!esDispositivoMovil()) {
+                contenido.style.display = 'none';  
+                video.style.display = 'none';
+                mensajeDispositivo.style.display = 'block';  
+            }
+        }
+        window.onload = mostrarMensajeDispositivo;
         let cuentaAtrasRojo;
         let cuentaAtrasVerde;
         let tiempoCuentaAtrasRojo = 3;
