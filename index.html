@@ -86,7 +86,7 @@
         <br>
         <div id="textoInfo" class="mt-4"></div>
         <br>
-          <div id="contador" class="fondo-negro">30 segundos restantes para la victoria</div> 
+          <div id="contador" class="fondo-negro">43200 segundos restantes para la victoria</div> 
   
     </div>
  <div id="mensaje-dispositivo">
@@ -111,13 +111,16 @@
         window.onload = mostrarMensajeDispositivo;
         let cuentaAtrasRojo;
         let cuentaAtrasVerde;
-        let tiempoCuentaAtrasRojo = 3;
-        let tiempoCuentaAtrasVerde = 3;
-        let tiempoContadorVictoria = 30;
+        let tiempoCuentaAtrasRojo = 120;
+        let tiempoCuentaAtrasVerde = 60;
+        let tiempoContadorVictoria = 43200;
         let faseActual='Negro';
-        let videoCorrectos = ["PLaanhBuiVU", "cLGMWX-DSzY", "i3Moae_SSlA", "7QLSRMoKKS0", "lpfZAXz2OP0", "AWM5ZNdWlqw", "Z4EwojysJv8", "na3U9Uvpz7g", "X-fXQ2u9HKg", "Dg4TOfazo_M", "Y4Fes8Up1tA", "5g_b5a_fKLU"];
-        let videoIncorrectos = ["Y4Fes8Up1tA"];
-        let videoIncorrectoss = ["eNnfMBCn8Gw"];
+        let videoCorrectos = ["WzhW20hLp6M" /*breaking bad 3-5*/, "WsqdmqRgrIc" /*Breaking bad 1-2*/, "QhBnZ6NPOY0" /*Naruto hood 3*/, "IwLSrNu1ppI" /*gnome flute*/, "afP71xwLI8Y" /*dabai dabai*/, "Z3DqFt-n-2U" /*Tarro*/, "xZLWXciIfKU" /*Un compete*/, "JSq1pa6eoM4" /*Los del eclipse*/, "DcJFdCmN98s" /*Dayum*/, "OATRTxwb2C0" /*6 motoristas*/, "PLaanhBuiVU" /*Davinki*/, "TLUkVxA2xkI" /*Sin animo de lucro*/, "k031AvVCqME" /*pim pam*/, "8sL2bKJZuic" /*Dragon Quest*/, "7p968aVZPgQ" /*Tudelano*/, "QqK8FQM4388" /*Quiere 50 euro*/, "841Nrqngu-A" /*Chuky cieza*/, "kgCbG0q4jmc" /*Borracho arbolada*/, "lmeSEobTvQk" /*me quedo sin comer*/
+        
+        
+         
+           ];
+        let videoIncorrectos = ["eNnfMBCn8Gw"];
         let videoVictoria = ["mLirlyAUtJQ"];
         const correctoSound = document.getElementById("correcto-sound");
         const incorrectoSound = document.getElementById("incorrecto-sound");
@@ -159,8 +162,8 @@
       			   const video = document.getElementById("video-fondo");
                const src = video.src;
                video.src = `https://www.youtube.com/embed/${videoRandom}?&loop=1&playlist=${videoRandom}&autoplay=1`; 
-          		 tiempoCuentaAtrasRojo = 3; 
-               tiempoCuentaAtrasVerde = 3; 
+          		 tiempoCuentaAtrasRojo = 120; 
+               tiempoCuentaAtrasVerde = 60; 
         			 clearInterval(cuentaAtrasVerde);
         		   const boton = document.getElementById("boton");
                const textoInfo = document.getElementById("textoInfo");
@@ -183,8 +186,8 @@
         
         function cambioFaseVerde(){
         		   clearInterval(cuentaAtrasRojo);               
-               tiempoCuentaAtrasRojo = 3; 
-               tiempoCuentaAtrasVerde = 3; 
+               tiempoCuentaAtrasRojo = 120; 
+               tiempoCuentaAtrasVerde = 60; 
         			 const boton = document.getElementById("boton");
             	 const textoInfo = document.getElementById("textoInfo");
         		   boton.classList.remove("btn-secondary", "btn-danger");
@@ -224,9 +227,9 @@
                     textoInfo.classList.remove("fondo-rojo", "fondo-verde");
             		    textoInfo.classList.add("fondo-negro");
              			  textoInfo.innerText = "Has perdido";
-                    tiempoCuentaAtrasRojo = 3; 
-                    tiempoCuentaAtrasVerde = 3; 
-                    tiempoContadorVictoria = 30; 
+                    tiempoCuentaAtrasRojo = 120; 
+                    tiempoCuentaAtrasVerde = 60; 
+                    tiempoContadorVictoria = 43200; 
                     actualizarContador();
         }
         
