@@ -54,6 +54,13 @@
         .fondo-negro {
             background-color: #343a40; 
         }
+        #contador {
+            margin-top: 20px;
+            font-size: 24px;
+            padding: 15px 30px;
+            border-radius: 30px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -70,6 +77,8 @@
         <button id="boton" class="btn btn-secondary" onclick="pulsacion()">Pulsa para empezar</button>
         <br>
         <div id="textoInfo" class="mt-4"></div>
+          <div id="contador" class="fondo-negro">30 segundos restantes para la victoria</div> 
+  
     </div>
 
     <script>
@@ -77,6 +86,7 @@
         let cuentaAtrasVerde;
         let tiempoCuentaAtrasRojo = 3;
         let tiempoCuentaAtrasVerde = 3;
+        let tiempoContadorVictoria = 30;
         let faseActual='Negro';
         let videoCorrectos = ["PLaanhBuiVU", "cLGMWX-DSzY"];
         let videoIncorrectos = ["eNnfMBCn8Gw", "31g0YE61PLQ"];
@@ -89,6 +99,13 @@
             const boton = document.getElementById("boton");
             const textoInfo = document.getElementById("textoInfo");
             if(faseActual === 'Negro') {
+            			cuentaAtrasVictoria = setInterval(() => {
+                    tiempoContadorVictoria--;
+                    actualizarContador();
+                    if (tiempoContadorVictoria <= 0) {
+                        hasGanado(); 
+                    }
+                }, 1000);
                   cambioFaseRojo();  
             }
             else
@@ -102,6 +119,11 @@
                }
               }
             }
+        }
+        
+        function actualizarContador() {
+            const contadorDiv = document.getElementById("contador");
+            contadorDiv.innerText = `${tiempoContadorVictoria} segundos restantes para la victoria`;
         }
         
         function cambioFaseRojo(){        	
@@ -161,6 +183,7 @@
              			  video.src = `https://www.youtube.com/embed/${videoRandom}?&loop=1&playlist=${videoRandom}&autoplay=1`; 
        					    clearInterval(cuentaAtrasRojo);
                     clearInterval(cuentaAtrasVerde);
+                    clearInterval(cuentaAtrasVictoria);
                     const boton = document.getElementById("boton");
                     const textoInfo = document.getElementById("textoInfo");
                     textoInfo.innerText = "Has perdido";
@@ -175,10 +198,27 @@
              			  textoInfo.innerText = "Has perdido";
                     tiempoCuentaAtrasRojo = 3; 
                     tiempoCuentaAtrasVerde = 3; 
+                    tiempoContadorVictoria = 30; 
+                    actualizarContador();
         }
         
         function hasGanado(){
-        
+        	clearInterval(cuentaAtrasVictoria);
+          const videoRandom = videoVictoria[Math.floor(Math.random() * videoVictoria.length)];
+          const video = document.getElementById("video-fondo");
+          video.src = `https://www.youtube.com/embed/${videoRandom}?&loop=1&playlist=${videoRandom}&autoplay=1`;    
+          clearInterval(cuentaAtrasRojo);
+          clearInterval(cuentaAtrasVerde);
+          const boton = document.getElementById("boton");
+          const textoInfo = document.getElementById("textoInfo");
+          textoInfo.innerText = "¡Has ganado!";
+          boton.classList.remove("btn-danger", "btn-success");
+          boton.classList.add("btn-primary");
+          boton.innerText = "¡Felicidades!";
+          faseActual = 'win';
+          winSound.play();
+          textoInfo.classList.remove("fondo-rojo", "fondo-verde");
+    			textoInfo.classList.add("fondo-negro");
         }
         
     </script>
