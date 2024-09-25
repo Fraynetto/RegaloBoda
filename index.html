@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Regalo o tortura?</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #343a40; 
+            color: white; 
+            text-align: center; 
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+        }
+        #boton {
+            border-radius: 50%; 
+            width: 150px;
+            height: 150px;
+            font-size: 20px; 
+            z-index: 2; 
+            position: relative;
+        }
+        #video-fondo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            object-fit: cover; 
+        }
+        #contenido {
+            position: relative;
+            z-index: 2; 
+        }
+        #textoInfo {
+            margin-top: 20px;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 18px;
+            display: inline-block;
+        }
+        .fondo-rojo {
+            background-color: #dc3545; 
+        }
+        .fondo-verde {
+            background-color: #28a745; 
+        }
+        .fondo-negro {
+            background-color: #343a40; 
+        }
+    </style>
+</head>
+<body>
+
+   <iframe id="video-fondo" src="https://www.youtube.com/embed/7QLSRMoKKS0?autoplay=1&loop=1&playlist=7QLSRMoKKS0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+    <div id="contenido">
+        <h1 class="display-4 font-weight-bold">Hola Iván y Ana, bienvenidos al infierno</h1>
+        
+        <button id="boton" class="btn btn-secondary" onclick="pulsacion()">Pulsa para empezar</button>
+        <br>
+        <div id="textoInfo" class="mt-4"></div>
+    </div>
+
+    <script>
+        let cuentaAtrasRojo;
+        let cuentaAtrasVerde;
+        let tiempoCuentaAtrasRojo = 3;
+        let tiempoCuentaAtrasVerde = 3;
+        let faseActual='Negro';
+        function pulsacion() {
+            const boton = document.getElementById("boton");
+            const textoInfo = document.getElementById("textoInfo");
+            if(faseActual === 'Negro') {
+                  cambioFaseRojo();  
+            }
+            else
+            {
+            	if (faseActual === 'Rojo'){
+              	hasPerdido();
+              }
+              else{
+               if (faseActual ==='Verde'){
+               		cambioFaseRojo();
+               }
+              }
+            }
+        }
+        
+        function cambioFaseRojo(){        			 
+          		 tiempoCuentaAtrasRojo = 3; 
+               tiempoCuentaAtrasVerde = 3; 
+        			 clearInterval(cuentaAtrasVerde);
+        		   const boton = document.getElementById("boton");
+               const textoInfo = document.getElementById("textoInfo");
+        		   boton.classList.remove("btn-secondary", "btn-success");
+             	 boton.classList.add("btn-danger");
+               boton.innerText = "No me pulses";
+               faseActual = 'Rojo';        
+               textoInfo.classList.remove("fondo-verde", "fondo-negro");
+          		 textoInfo.classList.add("fondo-rojo");
+               textoInfo.innerText = `Faltan ${tiempoCuentaAtrasRojo} segundos para la siguiente pulsacion`; 
+                cuentaAtrasRojo = setInterval(() => {
+                tiempoCuentaAtrasRojo--;
+                textoInfo.innerText = `Faltan ${tiempoCuentaAtrasRojo} segundos para la siguiente pulsacion`;   
+                if (tiempoCuentaAtrasRojo <= 0) {
+                    cambioFaseVerde();
+                }
+            }, 1000);
+        }
+        
+        function cambioFaseVerde(){
+        		   clearInterval(cuentaAtrasRojo);               
+               tiempoCuentaAtrasRojo = 3; 
+               tiempoCuentaAtrasVerde = 3; 
+        			 const boton = document.getElementById("boton");
+            	 const textoInfo = document.getElementById("textoInfo");
+        		   boton.classList.remove("btn-secondary", "btn-danger");
+               boton.classList.add("btn-success");               
+               boton.innerText = "Pulsame";
+               faseActual = 'Verde';    
+               textoInfo.classList.remove("fondo-rojo", "fondo-negro");
+               textoInfo.classList.add("fondo-verde");
+               textoInfo.innerText = `Tienes ${tiempoCuentaAtrasVerde} segundos para pulsar`; 
+                cuentaAtrasVerde = setInterval(() => {
+                tiempoCuentaAtrasVerde--;
+                textoInfo.innerText = `Tienes ${tiempoCuentaAtrasVerde} segundos para pulsar`;   
+                if (tiempoCuentaAtrasVerde <= 0) {
+                    hasPerdido();
+                }
+            }, 1000);
+        }
+        
+        
+        function hasPerdido() {
+       					    clearInterval(cuentaAtrasRojo);
+                    clearInterval(cuentaAtrasVerde);
+                    const boton = document.getElementById("boton");
+                    const textoInfo = document.getElementById("textoInfo");
+                    textoInfo.innerText = "Has perdido";
+                    boton.classList.remove("btn-danger");                    
+             		    boton.classList.remove("btn-success");
+                    boton.classList.add("btn-secondary");
+                    boton.innerText = "Pulsa para empezar";
+                    faseActual = 'Negro';
+                    textoInfo.classList.remove("fondo-rojo", "fondo-verde");
+            		    textoInfo.classList.add("fondo-negro");
+             			  textoInfo.innerText = "Has perdido";
+                    tiempoCuentaAtrasRojo = 3; 
+                    tiempoCuentaAtrasVerde = 3; 
+        }
+        
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
