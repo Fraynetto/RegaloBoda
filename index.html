@@ -58,10 +58,10 @@
 </head>
 <body>
 
-   <iframe id="video-fondo" src="https://www.youtube.com/embed/7QLSRMoKKS0?autoplay=1&loop=1&playlist=7QLSRMoKKS0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+   <iframe id="video-fondo" src="https://www.youtube.com/embed/7QLSRMoKKS0?&loop=1&playlist=7QLSRMoKKS0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 <audio id="correcto-sound" src="mp3/correcto.mp3"></audio> 
-<audio id="win-sound" src="mpr/win.mp3"></audio> 
+<audio id="win-sound" src="mp3/win.mp3"></audio> 
     <audio id="incorrecto-sound" src="mp3/incorrecto.mp3"></audio>
     
     <div id="contenido">
@@ -101,7 +101,10 @@
             }
         }
         
-        function cambioFaseRojo(){        			 
+        function cambioFaseRojo(){        	
+        const video = document.getElementById("video-fondo");
+    const src = video.src;
+    video.src = src + "&autoplay=1"; // Agregar autoplay al hacer clic
           		 tiempoCuentaAtrasRojo = 3; 
                tiempoCuentaAtrasVerde = 3; 
         			 clearInterval(cuentaAtrasVerde);
