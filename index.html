@@ -58,7 +58,7 @@
 </head>
 <body>
 
-   <iframe id="video-fondo" src="https://www.youtube.com/embed/7QLSRMoKKS0?&loop=1&playlist=7QLSRMoKKS0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+   <iframe id="video-fondo" src="https://www.youtube.com/embed/PLaanhBuiVU?&loop=1&playlist=PLaanhBuiVU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 <audio id="correcto-sound" src="mp3/correcto.mp3"></audio> 
 <audio id="win-sound" src="mp3/win.mp3"></audio> 
@@ -78,6 +78,9 @@
         let tiempoCuentaAtrasRojo = 3;
         let tiempoCuentaAtrasVerde = 3;
         let faseActual='Negro';
+        let videoCorrectos = ["PLaanhBuiVU", "cLGMWX-DSzY"];
+        let videoIncorrectos = ["eNnfMBCn8Gw", "31g0YE61PLQ"];
+        let videoVictoria = ["mLirlyAUtJQ"];
         const correctoSound = document.getElementById("correcto-sound");
         const incorrectoSound = document.getElementById("incorrecto-sound");
         const winSound = document.getElementById("win-sound");
@@ -102,9 +105,10 @@
         }
         
         function cambioFaseRojo(){        	
-        const video = document.getElementById("video-fondo");
-    const src = video.src;
-    video.src = src + "&autoplay=1"; // Agregar autoplay al hacer clic
+      		     const videoRandom = videoCorrectos[Math.floor(Math.random() * videoCorrectos.length)];    
+      			   const video = document.getElementById("video-fondo");
+               const src = video.src;
+               video.src = `https://www.youtube.com/embed/${videoRandom}?&loop=1&playlist=${videoRandom}&autoplay=1`; 
           		 tiempoCuentaAtrasRojo = 3; 
                tiempoCuentaAtrasVerde = 3; 
         			 clearInterval(cuentaAtrasVerde);
@@ -151,6 +155,10 @@
         
         
         function hasPerdido() {
+        						const videoRandom = videoIncorrectos[Math.floor(Math.random() * videoIncorrectos.length)];    
+      			 			  const video = document.getElementById("video-fondo");
+             			  const src = video.src;
+             			  video.src = `https://www.youtube.com/embed/${videoRandom}?&loop=1&playlist=${videoRandom}&autoplay=1`; 
        					    clearInterval(cuentaAtrasRojo);
                     clearInterval(cuentaAtrasVerde);
                     const boton = document.getElementById("boton");
@@ -167,6 +175,10 @@
              			  textoInfo.innerText = "Has perdido";
                     tiempoCuentaAtrasRojo = 3; 
                     tiempoCuentaAtrasVerde = 3; 
+        }
+        
+        function hasGanado(){
+        
         }
         
     </script>
