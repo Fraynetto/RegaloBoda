@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regalo de boda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+			background-color: #77bbcb;
+			display: flex;
+			flex-direction: column;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+			width: fit-content;
+			margin-left: auto;
+			margin-right: auto;
+			margin-inline: 1rem;
+        }
+		
+		.generico{
+			display: flex; 
+			margin-left: auto; 
+			margin-right: auto; 
+			align-items: center;
+		}
+		
+		@media (min-width: 768px) {
+			.iframe-container {
+				display: flex;
+				max-width: 30%;
+				aspect-ratio: 16 / 9; /* Proporción 16:9 */
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			.iframe-container iframe {
+				width: 100%;
+				height: 100%;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			
+			.imagenCabecera{
+				height: 70px; 
+				width: 70px;
+			}
+		}
+		
+		@media (max-width: 767px) {
+			.iframe-container {
+				max-width: 100%;
+				aspect-ratio: 16 / 9; /* Proporción 16:9 */
+			}
+
+			.iframe-container iframe {
+				width: 100%;
+				height: 100%;
+			}
+			
+			.imagenCabecera{
+				height: 40px; 
+				width: 40px;
+			}
+			
+			h1{
+				font-size: 1.5em;
+			}
+		}
+    </style>
+</head>
+<body>
+
+	<h1>
+		<img class="imagenCabecera" src="https://i.imgur.com/rfgZDZ9.gif" >
+		Pasandonos internet
+		<img class="imagenCabecera" src="https://i.imgur.com/RLOthSg.gif" >
+	</h1>
+	
+	<div style= "display: inline;">
+		<div class="iframe-container">
+			<iframe id="videoFrame" src="https://www.youtube.com/embed/PLaanhBuiVU?autoplay=1" frameborder="0" allow="autoplay; encrypted-media"  allowfullscreen></iframe>
+		</div>
+	</div>
+	
+	<div class="generico">
+		<button id="button" disabled>Pulsa Aquí</button>
+		<button id="restart" style="display:none;">Reiniciar Juego</button>
+	</div>
+	
+	<div class="generico">
+		<img src="https://i.imgur.com/bTgwHP9.gif" height="40" width="40">
+		<p id="message"> </p>
+		<img src="https://i.imgur.com/qcZrv7k.gif" height="36" width="70">
+	</div>
+   
+    <div class="generico">
+		<img src="https://i.imgur.com/8vBZt79.gif" height="30" width="30">
+		<p id="countdown">Tiempo restante: 60 segundos</p>
+	</div>
+	<p id="horaLimite">Hora límite: 60 segundos</p>
+	
+	<img src="https://i.imgur.com/35eRLsx.gif" height="304" width="158">
+	<img src="https://i.imgur.com/35eRLsx.gif" height="304" width="158">
+
+    <script>
+        // Tiempo total para el juego
+        let interval;
+		
+        const segundosCiclo = 15;
+		const segundosFinJuego = 5 * 60;
+		
+		let botonPulsado = true;
+		let inicioCiclo = eliminarMilliseconds(new Date());
+		let finCiclo = eliminarMilliseconds(sumarSegundos(inicioCiclo, segundosCiclo));
+		let cicloFinal = eliminarMilliseconds(sumarSegundos(inicioCiclo, segundosFinJuego));
+
+        function loadGameState() {
+			botonPulsado = (localStorage.getItem("botonPulsado") === 'true');
+			if(localStorage.getItem("inicioCiclo")!= null && localStorage.getItem("finCiclo")!= null){
+				inicioCiclo = eliminarMilliseconds(new Date(localStorage.getItem("inicioCiclo")));
+				finCiclo = eliminarMilliseconds(new Date(localStorage.getItem("finCiclo")));
+				cicloFinal = eliminarMilliseconds(sumarSegundos(inicioCiclo, segundosFinJuego));
+			}else{
+				inicioCiclo = eliminarMilliseconds(new Date());
+				finCiclo = eliminarMilliseconds(sumarSegundos(inicioCiclo, segundosCiclo));
+				cicloFinal = eliminarMilliseconds(sumarSegundos(inicioCiclo, segundosFinJuego));
+			}
+        }
+
+        function saveGameState() {
+            localStorage.setItem("botonPulsado", botonPulsado);
+            localStorage.setItem("inicioCiclo", inicioCiclo);
+			localStorage.setItem("finCiclo", finCiclo);
+        }
+
+        function resetGameState() {
+            localStorage.removeItem("botonPulsado");
+            localStorage.removeItem("inicioCiclo");
+			localStorage.removeItem("finCiclo");
+			botonPulsado = false;
+			document.getElementById('restart').style.display = 'none';
+        }
+
+        function startGame() {
+            loadGameState();
+			
+			document.getElementById('button').disabled = false;
+			document.getElementById('message').textContent = "";
+
+			// Poll cada segundo
+            interval = setInterval(() => {
+				let fechaActual = eliminarMilliseconds(new Date());
+				
+				//Comprobamos que estamos dentro de tiempo
+				if(inicioCiclo < fechaActual && fechaActual < finCiclo){
+					if(!botonPulsado){
+						document.getElementById('button').disabled = false;
+					}
+					else{
+						document.getElementById('message').textContent = "¡Ciclo completado! Puedes respirar";
+						document.getElementById('button').disabled = true;
+					}
+				}
+				
+				//Si se ha pulsado el boton y llegamos al final del ciclo calculamos el nuevo Ciclo
+				if(botonPulsado && fechaActual.getTime() == finCiclo.getTime()){
+					// Si es el ciclo final
+					if(cicloFinal.getTime() <= finCiclo.getTime()){
+						document.getElementById('message').textContent = "Conseguido!!!";
+						document.getElementById('restart').style.display = 'inline';
+						document.getElementById('button').disabled = true;
+						document.getElementById("videoFrame").src= "https://www.youtube.com/embed/fMmaPC4XeKk?autoplay=1";
+						actualizaContadores(fechaActual);
+						clearInterval(interval);
+					}else{
+						//Calculamos el nuevo ciclo
+						inicioCiclo = finCiclo;
+						finCiclo = sumarSegundos(inicioCiclo, segundosCiclo);
+						time = 0;
+						botonPulsado = false;
+						document.getElementById('button').disabled = false;
+						document.getElementById('message').textContent = "";
+					}
+				}
+				
+				if((!botonPulsado && fechaActual.getTime() === finCiclo.getTime()) || (fechaActual > finCiclo)){
+					document.getElementById('message').textContent = "You died.";
+					document.getElementById('restart').style.display = 'inline';
+					document.getElementById('button').disabled = true;
+					actualizaContadores(fechaActual);
+					clearInterval(interval);
+					document.getElementById("videoFrame").src= getRandomElement(arrayErrores);
+				}
+				
+				actualizaContadores(fechaActual);
+				
+				// Solo guarda el estado al cerrar el navegador
+                window.onbeforeunload = saveGameState;
+				
+            }, 1000);
+        }
+
+        document.getElementById('button').addEventListener('click', () => {
+			let fechaActual = eliminarMilliseconds(new Date());
+            if (inicioCiclo < fechaActual && fechaActual < finCiclo) {
+                document.getElementById('message').textContent = "¡Correcto!";
+                botonPulsado = true;
+				document.getElementById('button').disabled = true;
+				document.getElementById("videoFrame").src= getRandomElement(arrayContinuamos);
+            } else {
+                document.getElementById('message').textContent = "¡Demasiado tarde!";
+            }
+        });
+
+        document.getElementById('restart').addEventListener('click', () => {
+            clearInterval(interval);
+            resetGameState(); // Resetea el estado del juego
+            startGame(); // Reinicia el juego
+        });
+		
+		function actualizaContadores(fechaActual){
+			// Actualizacion cuenta atras
+			let remainingTime = getSecondsDifference(finCiclo, fechaActual);
+			
+			//Contadores
+			document.getElementById('countdown').textContent = `Tiempo restante: ${remainingTime} segundos`;
+			document.getElementById('horaLimite').textContent = `Hora límite: ${formatDate(finCiclo)} segundos`;
+				
+		}
+		
+		function sumarSegundos(fecha, segundos) {
+			// Crear una nueva fecha a partir de la fecha original
+			const nuevaFecha = new Date(fecha);
+			// Sumar los segundos a la fecha
+			nuevaFecha.setSeconds(nuevaFecha.getSeconds() + segundos);
+			return nuevaFecha;
+		}
+		
+		function eliminarMilliseconds(date) {
+		  // Establece los milisegundos a 0
+		  date.setMilliseconds(0);
+		  return date;
+		}
+		
+		function formatDate(date) {
+		  const day = String(date.getDate()).padStart(2, '0');  // Obtener día con dos dígitos
+		  const month = String(date.getMonth() + 1).padStart(2, '0');  // Obtener mes con dos dígitos
+		  const year = date.getFullYear();  // Obtener año
+
+		  const hours = String(date.getHours()).padStart(2, '0');  // Obtener horas con dos dígitos
+		  const minutes = String(date.getMinutes()).padStart(2, '0');  // Obtener minutos con dos dígitos
+		  const seconds = String(date.getSeconds()).padStart(2, '0');  // Obtener segundos con dos dígitos
+
+		  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+		}
+
+		//Segundos de distancia
+		function getSecondsDifference(date1, date2) {
+		  const differenceInMilliseconds = Math.abs(date1.getTime() - date2.getTime());
+		  const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);  // Convertir milisegundos a segundos
+		  return differenceInSeconds;
+		}
+		
+		//Obtener un elemento aleatorio de un array
+		function getRandomElement(arr) {
+		  const randomIndex = Math.floor(Math.random() * arr.length);
+		  return arr[randomIndex];
+		}
+
+        window.onload = startGame;
+		
+		const arrayContinuamos = [
+			"https://www.youtube.com/embed/PLaanhBuiVU?autoplay=1",
+			"https://www.youtube.com/embed/Jdlmgnk_qHg?autoplay=1",
+			"https://www.youtube.com/embed/dzt_7N9PpgM?autoplay=1",
+			"https://www.youtube.com/embed/_77x1DG_DzE?autoplay=1",
+			"https://www.youtube.com/embed/9Deg7VrpHbM?autoplay=1",
+			"https://www.youtube.com/embed/RS4t_U3jfmg?autoplay=1",
+			"https://www.youtube.com/embed/LU9rFIdwsHM?autoplay=1",
+			"https://www.youtube.com/embed/b89CnP0Iq30?autoplay=1",
+			"https://www.youtube.com/embed/5Ehk8q7xSAM?autoplay=1",
+			"https://www.youtube.com/embed/aZS0BnPWx4I?autoplay=1",
+			"https://www.youtube.com/embed/xWTkpK6gO58?autoplay=1",
+			"https://www.youtube.com/embed/FqUysDwQ57s?autoplay=1",
+			"https://www.youtube.com/embed/qnYiX-i08K0?autoplay=1",
+			"https://www.youtube.com/embed/eEh8Wgaz5Sc?autoplay=1",
+			"https://www.youtube.com/embed/r5Gm1zvS66s?autoplay=1",
+			"https://www.youtube.com/embed/L4HzcyWcO9w?autoplay=1",
+			"https://www.youtube.com/embed/Zk1nDwgncM0?autoplay=1",
+			"https://www.youtube.com/embed/83mkGuGLNZg?autoplay=1",
+			"https://www.youtube.com/embed/Dg4TOfazo_M?autoplay=1",
+			"https://www.youtube.com/embed/jw3jjN8kCyo?autoplay=1",
+			"https://www.youtube.com/embed/lMU0kq0RuOY?autoplay=1",
+			"https://www.youtube.com/embed/CnEJlPAl_mQ?autoplay=1",
+			"https://www.youtube.com/embed/9aW1QampyTE?autoplay=1",
+			"https://www.youtube.com/embed/23wJb-KbvD4?autoplay=1",
+			"https://www.youtube.com/embed/vH9GeF6eaT4?autoplay=1",
+			"https://www.youtube.com/embed/lte8aC-irFE?autoplay=1",
+			"https://www.youtube.com/embed/Dq8m4s9G14I?autoplay=1",
+			"https://www.youtube.com/embed/i3Moae_SSlA?autoplay=1",
+			"https://www.youtube.com/embed/7QLSRMoKKS0?autoplay=1",
+			"https://www.youtube.com/embed/lpfZAXz2OP0?autoplay=1",
+			"https://www.youtube.com/embed/AWM5ZNdWlqw?autoplay=1",
+			"https://www.youtube.com/embed/jKNmgnZkz6w?autoplay=1",
+			"https://www.youtube.com/embed/Z4EwojysJv8?autoplay=1",
+			"https://www.youtube.com/embed/xZLWXciIfKU?autoplay=1",
+			"https://www.youtube.com/embed/na3U9Uvpz7g?autoplay=1",
+			"https://www.youtube.com/embed/CZcMBWttLKs?autoplay=1",
+			"https://www.youtube.com/embed/3NeMPxB37B4?autoplay=1",
+			"https://www.youtube.com/embed/X-fXQ2u9HKg?autoplay=1",
+			"https://www.youtube.com/embed/ZccFoYGKrUs?autoplay=1",
+			"https://www.youtube.com/embed/j-tg_-2jDx8?autoplay=1",
+			
+			];
+		
+		const arrayErrores = ["https://www.youtube.com/embed/31g0YE61PLQ?autoplay=1",
+			"https://www.youtube.com/embed/eNnfMBCn8Gw?autoplay=1",
+			"https://www.youtube.com/embed/tS5Y8_-e43U?autoplay=1",
+			];
+    </script>
+
+</body>
+</html>
